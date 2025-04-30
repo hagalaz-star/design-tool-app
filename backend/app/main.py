@@ -1,17 +1,13 @@
 from fastapi import FastAPI
-from pydantic import BaseModel
-
-
-class Item(BaseModel):
-    name: str
-    description: str | None = None
-    price: float
-    tax: float | None = None
-
+from app.api.endpoints import design
 
 app = FastAPI()
 
+# 디자인 라우터를 앱에 포함
+app.include_router(design.router)
 
-@app.post("/items/")
-async def create_item(item: Item):
-    return item
+# Optional: 루트 경로 설정
+@app.get("/")
+async def read_root():
+
+    return {"message": "Welcome to the Design Tool API"}
