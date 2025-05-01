@@ -26,10 +26,13 @@ function TrendDesign({ componentType, onSelectDesign }: TrendDesignProps) {
     setError("");
 
     try {
-      const response = await axios.post("/api/design/trend", {
-        prompt: `최신 트렌드 ${componentType} 디자인`,
-        keywords: [componentType, "최신", "트렌드"],
-      });
+      const response = await axios.post(
+        `${process.env.NEXT_PUBLIC_API_URL}/api/design/trend`,
+        {
+          prompt: `최신 트렌드 ${componentType} 디자인`,
+          keywords: [componentType, "최신", "트렌드"],
+        }
+      );
 
       setTrendResult(response.data);
     } catch (error) {
