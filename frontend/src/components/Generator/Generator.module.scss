@@ -415,6 +415,103 @@
   }
 }
 
+// Generator.module.scss 파일에 추가할 스타일
+
+.aiSection {
+  margin-top: var(--spacing-2xl);
+  padding: var(--spacing-lg);
+  background-color: var(--background-primary);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-sm);
+  transition: all var(--transition-normal);
+  border: 1px solid var(--border-color);
+  position: relative;
+  overflow: hidden;
+  will-change: transform;
+  transform: translateZ(0);
+
+  // 배경에 미묘한 패턴 추가
+  &::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 50%;
+    height: 100%;
+    background: linear-gradient(
+      135deg,
+      transparent 0%,
+      rgba(67, 97, 238, 0.02) 100%
+    );
+    z-index: 0;
+    opacity: 0.5;
+  }
+
+  &:hover {
+    box-shadow: var(--shadow-md);
+    transform: translateY(-3px);
+  }
+}
+
+.aiSectionTitle {
+  font-size: var(--font-size-xl);
+  color: var(--text-primary);
+  margin-bottom: var(--spacing-lg);
+  font-weight: 600;
+  position: relative;
+  display: inline-block;
+  z-index: 1;
+
+  // 특별한 표식 추가
+  &::before {
+    content: "✨";
+    display: inline-block;
+    margin-right: var(--spacing-sm);
+    font-size: 1.1em;
+  }
+
+  // 밑줄 효과
+  &::after {
+    content: "";
+    position: absolute;
+    bottom: calc(-1 * var(--spacing-xs));
+    left: 0;
+    width: 40px;
+    height: 3px;
+    background: linear-gradient(
+      90deg,
+      var(--primary-color),
+      var(--secondary-color)
+    );
+    border-radius: var(--radius-sm);
+    transition: width var(--transition-normal);
+  }
+
+  &:hover::after {
+    width: 100%;
+  }
+}
+
+// AI 컴포넌트 간의 간격 조절
+.aiSection > div {
+  margin-bottom: var(--spacing-xl);
+
+  &:last-child {
+    margin-bottom: 0;
+  }
+}
+
+// 미디어 쿼리 - 모바일 최적화
+@media (max-width: 768px) {
+  .aiSection {
+    padding: var(--spacing-md);
+  }
+
+  .aiSectionTitle {
+    font-size: var(--font-size-lg);
+  }
+}
+
 /* Animation Keyframes */
 @keyframes fadeIn {
   from {

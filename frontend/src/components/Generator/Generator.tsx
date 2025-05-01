@@ -33,24 +33,25 @@ import {
 } from "@/types/index";
 
 import useComponentStore from "@/store/useComponentStore";
+import TrendDesign from "../TrendDesign/TrendDesign";
 
-const componentConfig = {
-  button: {
-    Component: ButtonOptionsPanel,
-    Preview: ButtonPreview,
-    CodeGenerator: ButtonCode,
-  },
-  card: {
-    Component: CardOptionsPanel,
-    Preview: CardPreview,
-    CodeGenerator: CardCode,
-  },
-  navbar: {
-    Component: NavbarOptionsPanel,
-    Preview: NavbarPreview,
-    CodeGenerator: NavbarCode,
-  },
-};
+// const componentConfig = {
+//   button: {
+//     Component: ButtonOptionsPanel,
+//     Preview: ButtonPreview,
+//     CodeGenerator: ButtonCode,
+//   },
+//   card: {
+//     Component: CardOptionsPanel,
+//     Preview: CardPreview,
+//     CodeGenerator: CardCode,
+//   },
+//   navbar: {
+//     Component: NavbarOptionsPanel,
+//     Preview: NavbarPreview,
+//     CodeGenerator: NavbarCode,
+//   },
+// };
 
 const Generator = () => {
   const {
@@ -115,27 +116,27 @@ const Generator = () => {
     setCustomCode(null);
   }, [selectedComponent]);
 
-  const CurrentComponent = useMemo(() => {
-    type CurrentType = typeof selectedComponent;
-    type SelectCurrnet = ComponentOptionsTypeMap[CurrentType];
-    const config = componentConfig[selectedComponent];
+  // const CurrentComponent = useMemo(() => {
+  //   type CurrentType = typeof selectedComponent;
+  //   type SelectCurrnet = ComponentOptionsTypeMap[CurrentType];
+  //   const config = componentConfig[selectedComponent];
 
-    return {
-      Options: config.Component as React.ComponentType<{
-        options: SelectCurrnet;
-        onOptionChange: (name: string, value: any) => void;
-      }>,
-      Preview: config.Preview as React.ComponentType<{
-        options: SelectCurrnet;
-      }>,
-      Code: config.CodeGenerator as React.ComponentType<{
-        options: SelectCurrnet;
-        codeFormat: "react-tailwind" | "react-scss";
-        onFormatChange: (format: "react-tailwind" | "react-scss") => void;
-        customCode: string | null;
-      }>,
-    };
-  }, [selectedComponent]);
+  //   return {
+  //     Options: config.Component as React.ComponentType<{
+  //       options: SelectCurrnet;
+  //       onOptionChange: (name: string, value: any) => void;
+  //     }>,
+  //     Preview: config.Preview as React.ComponentType<{
+  //       options: SelectCurrnet;
+  //     }>,
+  //     Code: config.CodeGenerator as React.ComponentType<{
+  //       options: SelectCurrnet;
+  //       codeFormat: "react-tailwind" | "react-scss";
+  //       onFormatChange: (format: "react-tailwind" | "react-scss") => void;
+  //       customCode: string | null;
+  //     }>,
+  //   };
+  // }, [selectedComponent]);
 
   function generatedCurrentCode(
     componentType: ComponentType,
@@ -276,7 +277,14 @@ const Generator = () => {
           )}
         </div>
 
-        <div>
+        <div className={styles.aiSection}>
+          <h3 className={styles.aiSectionTitle}>AI 기능</h3>
+
+          <TrendDesign
+            componentType={selectedComponent}
+            onSelectDesign={handleOptimizedCode}
+          />
+
           <AIOptimizer
             currentCode={currentCodeString}
             componentType={selectedComponent}
@@ -290,9 +298,7 @@ const Generator = () => {
             codeFormat={codeFormat}
             onApplyOptimized={handleOptimizedCode}
           />
-        </div>
 
-        <div>
           <AiDesign
             componentType={selectedComponent}
             onSelectDesign={onSelectDesign}

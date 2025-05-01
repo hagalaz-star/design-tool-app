@@ -1,0 +1,32 @@
+# Byte-code files
+__pycache__/
+*.pyc
+*.pyd
+*.pyo
+*.spec
+
+# Virtual environment
+.venv/
+venv/
+env/
+# 만약 가상환경 폴더 이름을 다르게 했다면 해당 이름으로 추가
+
+# Editor/IDE
+.vscode/
+.idea/
+
+# OS generated files
+.DS_Store
+Thumbs.db
+
+# Testing
+.pytest_cache/
+.coverage
+
+# Databases
+*.sqlite3 # SQLite 데이터베이스 파일
+
+# Logs andอื่นๆ
+*.log
+dist/
+build/

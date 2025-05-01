@@ -1,7 +1,10 @@
 import axios from "axios";
 import styles from "./AiDesign.module.scss";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { ComponentType } from "../../types/index";
+import useComponentStore from "@/store/useComponentStore";
+import hljs from "highlight.js";
+import "highlight.js/styles/github.css";
 
 // ai 디자인 종류
 interface DesignVariant {
@@ -21,6 +24,16 @@ function AiDesign({ componentType, onSelectDesign }: AiDesignProps) {
   const [loading, setLoading] = useState(false); // 로딩
   const [error, setError] = useState("");
 
+  const { codeFormat } = useComponentStore();
+
+  useEffect(() => {
+    if (designVariant.length > 0) {
+      document.querySelectorAll(".codePreview code").forEach((block) => {
+        hljs.highlightElement(block as HTMLElement);
+      });
+    }
+  }, [designVariant]);
+
   const recommendedDesign = async () => {
     setLoading(true);
     setError("");
@@ -28,7 +41,10 @@ function AiDesign({ componentType, onSelectDesign }: AiDesignProps) {
 
     // API 요청을 통해 여러 디자인 변형 생성 요청
     try {
-      const promptText = `Create 4 different design styles for a ${componentType} component:
+      let promptText = "";
+
+      if (codeFormat === "react-tailwind") {
+        promptText = `Create 4 different design styles for a ${componentType} component using Tailwind CSS:
       1. Minimalist
       2. Neumorphic
       3. Glassmorphic
@@ -37,12 +53,16 @@ function AiDesign({ componentType, onSelectDesign }: AiDesignProps) {
       6. Brutalist
     
       For each style, provide:
-      - Style name
-      - Complete React code using Tailwind CSS
+      - Style name (e.g., "Minimalist Button")
       - A brief description of the style
-    
-      IMPORTANT: Return ONLY a valid JSON object with NO markdown formatting or code blocks.
-      The JSON must follow this exact structure:
+      - Complete React component code using inline Tailwind classes
+
+      IMPORTANT: 
+        - Each design must use ONLY inline Tailwind CSS classes
+        - DO NOT use external CSS/SCSS files or imports
+        - Return ONLY a valid JSON object with NO markdown formatting
+     
+        The JSON must follow this exact structure:
       {
         "variants": [
           {
@@ -53,6 +73,51 @@ function AiDesign({ componentType, onSelectDesign }: AiDesignProps) {
           ...
         ]
       }`;
+      } else {
+        // SCSS 형식일 경우
+        promptText = `Create 4 different design styles for a ${componentType} component using React with SCSS:
+      1. Minimalist
+      2. Neumorphic
+      3. Glassmorphic
+      4. Material Design
+      5. Skeuomorphic
+      6. Brutalist
+      
+      For each style, provide:
+      - Style name (e.g., "Minimalist Button")
+      - A brief description of the style
+      - Complete code including BOTH the React component AND the SCSS styles in a single code block
+      
+      IMPORTANT:
+      - For each design, include BOTH the React component AND the complete SCSS code in the same code block
+      - The SCSS should be written DIRECTLY after the React component, not as a separate import
+      - Format like this:
+      
+      // React component
+      const ComponentName = () => {
+        return (...);
+      };
+      
+      // SCSS styles directly below
+      .class-name {
+        property: value;
+        &:hover { ... }
+      }
+      
+      - Return ONLY a valid JSON object with NO markdown formatting
+      
+      The JSON must follow this exact structure:
+      {
+        "variants": [
+          {
+            "designName": "Style Name",
+            "code": "// Combined React component and SCSS styles in one block",
+            "description": "Brief description of the style"
+          },
+          ...
+        ]
+      }`;
+      }
 
       const response = await axios.post("/api/gemini", {
         prompt: promptText,
@@ -86,6 +151,10 @@ function AiDesign({ componentType, onSelectDesign }: AiDesignProps) {
   return (
     <div className={styles.aiDesignContainer}>
       <h3 className={styles.aiDesignTitle}>AI 추천 디자인 코드</h3>
+      <p>
+        현재 선택된 포맷:
+        {codeFormat === "react-tailwind" ? " Tailwind CSS" : " SCSS"}
+      </p>
       <br></br>
       <button
         onClick={recommendedDesign}
@@ -112,6 +181,7 @@ function AiDesign({ componentType, onSelectDesign }: AiDesignProps) {
                   <code>{variant.code.substring(0, 100)}</code>
                 </pre>
               </div>
+
               <button
                 className={styles.selectDesign}
                 onClick={() => onSelectDesign(variant.code)}
