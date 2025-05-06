@@ -2,6 +2,7 @@ from fastapi import FastAPI
 from app.api.endpoints import design
 from fastapi.middleware.cors import CORSMiddleware
 
+
 app = FastAPI()
 
 # 디자인 라우터를 앱에 포함

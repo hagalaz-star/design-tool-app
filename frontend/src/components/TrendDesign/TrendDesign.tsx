@@ -1,7 +1,7 @@
 import styles from "./TrendDesign.module.scss";
 import axios from "axios";
 import { ComponentType } from "../../types";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 
 interface TrendDesignResponse {
   generated_text: string;
@@ -20,6 +20,13 @@ function TrendDesign({ componentType, onSelectDesign }: TrendDesignProps) {
   );
   const [loading, setLoading] = useState(false); // 로딩
   const [error, setError] = useState("");
+
+  useEffect(() => {
+    if (trendResult) {
+      console.log("트렌드 결과:", trendResult);
+      console.log("이미지 결과:", trendResult?.image_url);
+    }
+  }, [trendResult]);
 
   const fetchTrendDesign = async () => {
     setLoading(true);
