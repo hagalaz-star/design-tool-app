@@ -9,8 +9,8 @@ interface TrendDesignResponse {
 }
 
 interface TrendDesignRequest {
-  componentType: string;
-  code_format: string[];
+  prompt: string;
+  keywords?: string[];
 }
 
 interface TrendDesignProps {
@@ -54,9 +54,9 @@ function TrendDesign({ componentType, onSelectDesign }: TrendDesignProps) {
     setError(null);
 
     try {
-      const request: TrendDesignRequest = {
-        componentType: `최신 트렌드 ${componentType} 디자인`,
-        code_format: ["react-tailwind", "react-scss"],
+      const request = {
+        prompt: `최신 트렌드 ${componentType} 디자인`,
+        keywords: ["react", "design", componentType],
       };
 
       const result = await fetchTrendDesignAPI(request);

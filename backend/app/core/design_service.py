@@ -3,8 +3,11 @@ from app.core.ai_service import  get_trend_design_code
 
 
 # 트렌트 디자인 요청을 처리하는 핵심 서비스 함수
-async def get_trend_design(component_type, code_format):
+async def get_trend_design(request):
     # 요청 데이터를 기반으로 캐시 키 생성
+    component_type =request.prompt
+    code_format = request.keywords
+    
     cache_key = cache.generate_cache_key(component_type, code_format)
     print(f"Generated cache key:{cache_key[:10]}...")
 
