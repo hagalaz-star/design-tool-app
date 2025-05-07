@@ -1,12 +1,16 @@
 import styles from "./TrendDesign.module.scss";
-import axios from "axios";
+import axios, { AxiosError } from "axios";
 import { ComponentType } from "../../types";
 import React, { useEffect, useState } from "react";
 
 interface TrendDesignResponse {
   generated_text: string;
-  image_url: string;
   cached: boolean;
+}
+
+interface TrendDesignRequest {
+  componentType: string;
+  code_format: string[];
 }
 
 interface TrendDesignProps {
@@ -14,37 +18,68 @@ interface TrendDesignProps {
   onSelectDesign: (code: string) => void;
 }
 
+// API 요청 함수를 분리
+const fetchTrendDesignAPI = async (
+  request: TrendDesignRequest
+): Promise<TrendDesignResponse> => {
+  const response = await axios.post<TrendDesignResponse>(
+    `${process.env.NEXT_PUBLIC_API_URL}/api/design/trend`,
+    request,
+    {
+      headers: {
+        "Content-Type": "application/json",
+        Accept: "application/json",
+      },
+      timeout: 30000, // 30초 타임아웃
+    }
+  );
+  return response.data;
+};
+
 function TrendDesign({ componentType, onSelectDesign }: TrendDesignProps) {
   const [trendResult, setTrendResult] = useState<TrendDesignResponse | null>(
     null
   );
-  const [loading, setLoading] = useState(false); // 로딩
-  const [error, setError] = useState("");
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
     if (trendResult) {
       console.log("트렌드 결과:", trendResult);
-      console.log("이미지 결과:", trendResult?.image_url);
     }
   }, [trendResult]);
 
   const fetchTrendDesign = async () => {
     setLoading(true);
-    setError("");
+    setError(null);
 
     try {
-      const response = await axios.post(
-        `${process.env.NEXT_PUBLIC_API_URL}/api/design/trend`,
-        {
-          prompt: `최신 트렌드 ${componentType} 디자인`,
-          keywords: [componentType, "최신", "트렌드"],
-        }
-      );
+      const request: TrendDesignRequest = {
+        componentType: `최신 트렌드 ${componentType} 디자인`,
+        code_format: ["react-tailwind", "react-scss"],
+      };
 
-      setTrendResult(response.data);
+      const result = await fetchTrendDesignAPI(request);
+      setTrendResult(result);
     } catch (error) {
-      console.error("트렌드 디자인 가져오기 실패:", error);
-      setError("트렌드 디자인을 가져오는중 오류가 발생했습니다");
+      const axiosError = error as AxiosError;
+      console.error("트렌드 디자인 가져오기 실패:", axiosError);
+
+      if (axiosError.response) {
+        // 서버에서 응답이 왔지만 에러인 경우
+        setError(
+          `서버 오류: ${axiosError.response.status} - ${axiosError.response.data}`
+        );
+      } else if (axiosError.request) {
+        // 요청은 보냈지만 응답이 없는 경우
+        setError("서버에 연결할 수 없습니다. 네트워크 연결을 확인해주세요.");
+      } else if (axiosError.code === "ECONNABORTED") {
+        // 타임아웃 발생
+        setError("요청 시간이 초과되었습니다. 다시 시도해주세요.");
+      } else {
+        // 기타 에러
+        setError("트렌드 디자인을 가져오는중 오류가 발생했습니다");
+      }
     } finally {
       setLoading(false);
     }
@@ -80,12 +115,6 @@ function TrendDesign({ componentType, onSelectDesign }: TrendDesignProps) {
 
           <div className={styles.resultContent}>
             <p>{trendResult?.generated_text}</p>
-
-            {trendResult.image_url && (
-              <div className={styles.imageContainer}>
-                <img src={trendResult.image_url} alt="트렌드 스타일 이미지" />
-              </div>
-            )}
 
             <button
               className={styles.applyButton}

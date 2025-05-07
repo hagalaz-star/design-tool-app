@@ -17,7 +17,7 @@ class DesignResponse(BaseModel):
     """
 
     generated_text: str # ai가 생성한 스타일 설명 텍스트
-    image_url: Optional[str] = None # ai가 제공하거나 찾아준 관련 이미지 URL
+    sample_code: str # ai가 제공하거나 찾아준 관련 이미지 URL
     cached: bool # 이 결과가 캐시에서 가져온 것인지 여부
 
 

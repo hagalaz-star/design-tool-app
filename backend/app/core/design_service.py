@@ -1,12 +1,11 @@
-from app.schemas.design import DesignRequest, DesignResponse
 from app.core import cache
-from app.core.ai_service import  get_trend_design_from_ai
+from app.core.ai_service import  get_trend_design_code
 
 
 # 트렌트 디자인 요청을 처리하는 핵심 서비스 함수
-async def get_trend_design(request: DesignRequest) -> DesignResponse:
+async def get_trend_design(component_type, code_format):
     # 요청 데이터를 기반으로 캐시 키 생성
-    cache_key = cache.generate_cache_key(request.prompt, request.keywords)
+    cache_key = cache.generate_cache_key(component_type, code_format)
     print(f"Generated cache key:{cache_key[:10]}...")
 
     # 캐시 확인
@@ -21,7 +20,7 @@ async def get_trend_design(request: DesignRequest) -> DesignResponse:
     else:
         # 캐시에 결과가 없으면 ai호출 시뮬
         print("Calling AI simulation.")
-        ai_response = await get_trend_design_from_ai(request)
+        ai_response = await get_trend_design_code(component_type, code_format)
 
         # ai 결과를 캐시에 저장
         cache.set_to_cache(cache_key, ai_response)
