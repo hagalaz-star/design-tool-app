@@ -2,6 +2,8 @@ import styles from "./TrendDesign.module.scss";
 import axios, { AxiosError } from "axios";
 import { ComponentType } from "../../types";
 import React, { useEffect, useState } from "react";
+import ReactMarkdown from "react-markdown";
+import remarkGfm from "remark-gfm";
 
 interface TrendDesignResponse {
   generated_text: string;
@@ -55,8 +57,14 @@ function TrendDesign({ componentType, onSelectDesign }: TrendDesignProps) {
 
     try {
       const request = {
-        prompt: `최신 트렌드 ${componentType} 디자인`,
-        keywords: ["react", "design", componentType],
+        prompt: `최신 트렌드 ${componentType} 디자인 - 마크다운 형식으로 코드 예제와 함께 제공해주세요`,
+        keywords: [
+          "react",
+          "design",
+          componentType,
+          "markdown",
+          "code example",
+        ],
       };
 
       const result = await fetchTrendDesignAPI(request);
@@ -114,7 +122,11 @@ function TrendDesign({ componentType, onSelectDesign }: TrendDesignProps) {
           </div>
 
           <div className={styles.resultContent}>
-            <p>{trendResult?.generated_text}</p>
+            <div className={styles.markdownContent}>
+              <ReactMarkdown remarkPlugins={[remarkGfm]}>
+                {trendResult?.generated_text}
+              </ReactMarkdown>
+            </div>
 
             <button
               className={styles.applyButton}

@@ -16,9 +16,13 @@ class DesignResponse(BaseModel):
     백엔드에서 프론트엔드로 보내는 트렌드 스타일 생성 결과 데이터 모델
     """
 
-    generated_text: str # ai가 생성한 스타일 설명 텍스트
-    sample_code: str # ai가 제공하거나 찾아준 관련 이미지 URL
+    generated_text: str # AI가 생성한 스타일 설명 텍스트
+    sample_code: str # AI가 제공한 샘플 코드
     cached: bool # 이 결과가 캐시에서 가져온 것인지 여부
+    title: str = "" # 트렌드 제목 (선택적)
+    description: str = "" # 트렌드 핵심 설명 (선택적)
+    visual_elements: list[str] = [] # 시각 요소 목록 (선택적)
+    application_tips: str = "" # 적용 팁 (선택적)
 
 
     
