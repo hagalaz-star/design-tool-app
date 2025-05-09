@@ -15,28 +15,50 @@ bun dev
 ```
 
 ```
-src/
-├── app/
-│   ├── page.tsx
-│   ├── layout.tsx
-│   └── globals.scss
-├── components/
-│   ├── Generator/
-│   │   └── index.tsx  # 메인 Generator 컴포넌트 (기존과 동일)
-│   ├── Button/
-│   │   ├── ButtonOptions.tsx
-│   │   ├── ButtonPreview.tsx
-│   │   └── ButtonCodeGenerator.ts
-│   ├── Card/
-│   │   ├── CardOptions.tsx
-│   │   ├── CardPreview.tsx
-│   │   └── CardCodeGenerator.ts
-│   └── Navbar/
-│       ├── NavbarOptions.tsx
-│       ├── NavbarPreview.tsx
-│       └── NavbarCodeGenerator.ts
-└── types/
-    └── index.ts  # 기존 타입 정의 (개선된 버전)
+├── src/                       # 소스 코드
+│   ├── app/                   # Next.js 앱 디렉토리
+│   │   ├── api/               # API 라우트
+│   │   │   └── gemini/        # Gemini AI API 연동
+│   │   │       └── route.ts   # API 라우트 핸들러
+│   │   ├── globals.scss       # 전역 스타일
+│   │   ├── layout.tsx         # 앱 레이아웃 컴포넌트
+│   │   └── page.tsx           # 메인 페이지 컴포넌트
+│   ├── components/            # 컴포넌트 디렉토리
+│   │   ├── AIDesign/          # AI 디자인 추천 컴포넌트
+│   │   │   ├── AiDesign.module.scss
+│   │   │   └── AiDesign.tsx
+│   │   ├── AIOptimizer/       # AI 코드 최적화 컴포넌트
+│   │   │   ├── AIOptimizer.module.scss
+│   │   │   └── AIOptimizer.tsx
+│   │   ├── Button/            # 버튼 컴포넌트
+│   │   │   ├── Button.module.scss
+│   │   │   ├── ButtonCodeGenerator.tsx
+│   │   │   ├── ButtonOptions.tsx
+│   │   │   └── ButtonPreview.tsx
+│   │   ├── Card/              # 카드 컴포넌트
+│   │   │   ├── Card.module.scss
+│   │   │   ├── CardCode.tsx
+│   │   │   ├── CardCodeGenerator.tsx
+│   │   │   ├── CardOptions.tsx
+│   │   │   └── CardPreview.tsx
+│   │   ├── Generator/         # 메인 생성기 컴포넌트
+│   │   │   ├── Generator.module.scss
+│   │   │   └── Generator.tsx
+│   │   ├── Navbar/            # 네비게이션 바 컴포넌트
+│   │   │   ├── Navbar.module.scss
+│   │   │   ├── NavbarCodeGenerator.tsx
+│   │   │   ├── NavbarOptions.tsx
+│   │   │   └── NavbarPreview.tsx
+│   │   └── TrendDesign/       # 트렌드 디자인 컴포넌트
+│   │       ├── TrendDesign.module.scss
+│   │       └── TrendDesign.tsx
+│   ├── store/                 # 상태 관리
+│   │   └── useComponentStore.ts  # Zustand 스토어
+│   ├── types/                 # 타입 정의
+│   │   └── index.ts           # 공통 타입 정의
+│   └── utils/                 # 유틸리티 함수
+│       └── CodeDisplay.tsx    # 코드 표시 및 생성 유틸리티
+└── tsconfig.json              # TypeScript 설정
 ```
 
 # UI 컴포넌트 제너레이터

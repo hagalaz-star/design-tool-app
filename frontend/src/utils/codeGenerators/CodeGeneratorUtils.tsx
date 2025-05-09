@@ -66,10 +66,10 @@ export function generateButtonCode(
       : "";
 
     return `
-    <button 
+    <button
   className="bg-[${options.backgroundColor}] text-[${
       options.color
-    }] ${sizeClasses} ${roundedClass} border-none cursor-pointer transition-all ${hoverClass} ${activeClass} ${disabledClass}" 
+    }] ${sizeClasses} ${roundedClass} border-none cursor-pointer transition-all ${hoverClass} ${activeClass} ${disabledClass}"
   ${options.disabled ? "disabled" : ""}
 >
   ${options.text || "버튼"}
@@ -91,7 +91,7 @@ export function generateButtonCode(
     }>
   ${options.text || "버튼"}
 </button>
-      
+
       .button {
   background-color: ${options.backgroundColor};
   color: ${options.color};
@@ -100,7 +100,7 @@ export function generateButtonCode(
   cursor: ${options.disabled ? "not-allowed" : "pointer"};
   transition: all 0.2s ease;
   ${options.disabled ? "opacity: 0.5;" : ""}
-  
+
   &:hover {
     ${options.hoverEffect === "scale" ? "transform: scale(1.05);" : ""}
     ${options.hoverEffect === "lift" ? "transform: translateY(-3px);" : ""}
@@ -110,7 +110,7 @@ export function generateButtonCode(
         : ""
     }
   }
-  
+
   &:active {
     ${options.clickEffect === "press" ? "transform: scale(0.95);" : ""}
     ${
@@ -225,15 +225,15 @@ export function generateCardCode(
       ? `<div className="w-full ${
           options.layout === "horizontal" ? "w-1/3" : ""
         } ${imagePositionClass}">
-    <img 
-      src="${options.imageUrl}" 
-      alt="${options.title || "카드 이미지"}" 
-      className="w-full h-auto object-cover" 
+    <img
+      src="${options.imageUrl}"
+      alt="${options.title || "카드 이미지"}"
+      className="w-full h-auto object-cover"
     />
   </div>`
       : ""
   }
-  
+
   <div className="${
     hasImage && options.layout === "horizontal" ? "w-2/3 p-4" : "w-full"
   } ${contentAlignClass}">
@@ -259,7 +259,7 @@ export function generateCardCode(
   </div>`
       : ""
   }
-  
+
   <div className={styles.content}>
     <h3 className={styles.title}>${options.title || "카드 제목"}</h3>
     <p className={styles.description}>${
@@ -267,7 +267,6 @@ export function generateCardCode(
     }</p>
   </div>
 </div>
-
 
 .card {
     backgroundColor: ${options.backgroundColor},
@@ -284,11 +283,11 @@ export function generateCardCode(
     overflow: hidden;
     transition: all 0.3s ease;
     display: ${options.layout === "horizontal" ? "flex" : "block"};
-      
+
     &:hover {
     transform: translateY(-5px);
     box-shadow: 0 12px 20px rgba(0,0,0,0.1);
-   } 
+   }
   }
 
   .imageContainer {
@@ -453,7 +452,7 @@ export function generateNavbarCode(
   };
   color: ${options.logoColor};
 }
-      
+
 .menu {
   display: flex;
   list-style: none;
@@ -468,7 +467,7 @@ export function generateNavbarCode(
       : "flex-start"
   };
 }
-      
+
 .menuItem {
   cursor: pointer;
   color: ${options.textColor};
@@ -480,11 +479,11 @@ export function generateNavbarCode(
       ? "500"
       : "bold"
   };
-  
+
   &:hover {
     text-decoration: underline;
   }
-}     
+}
     `.trim();
   }
 

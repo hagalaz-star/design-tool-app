@@ -1,7 +1,7 @@
 import React from "react";
 import styles from "./Navbar.module.scss";
 import { NavbarOptions } from "@/types";
-import { CodeDisplay } from "@/utils/CodeDisplay";
+import { CodeDisplay } from "@/utils/codeGenerators/CodeGeneratorUtils";
 
 interface NavbarType {
   options: NavbarOptions;

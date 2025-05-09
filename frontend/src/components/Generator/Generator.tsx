@@ -22,7 +22,7 @@ import {
   generateButtonCode,
   generateCardCode,
   generateNavbarCode,
-} from "../../utils/CodeDisplay";
+} from "../../utils/codeGenerators/CodeGeneratorUtils";
 
 import {
   ComponentType,
@@ -32,26 +32,9 @@ import {
   NavbarOptions,
 } from "@/types/index";
 
+// Zustand 스토어
 import useComponentStore from "@/store/useComponentStore";
 import TrendDesign from "../TrendDesign/TrendDesign";
-
-// const componentConfig = {
-//   button: {
-//     Component: ButtonOptionsPanel,
-//     Preview: ButtonPreview,
-//     CodeGenerator: ButtonCode,
-//   },
-//   card: {
-//     Component: CardOptionsPanel,
-//     Preview: CardPreview,
-//     CodeGenerator: CardCode,
-//   },
-//   navbar: {
-//     Component: NavbarOptionsPanel,
-//     Preview: NavbarPreview,
-//     CodeGenerator: NavbarCode,
-//   },
-// };
 
 const Generator = () => {
   const {
@@ -69,12 +52,26 @@ const Generator = () => {
     setCustomCode,
   } = useComponentStore();
 
+  // 현재 선택된 컴포넌트의 옵션
+  const currentOptions = useMemo(() => {
+    switch (selectedComponent) {
+      case "button":
+        return buttonOptions;
+      case "card":
+        return cardOptions;
+      case "navbar":
+        return navbarOptions;
+      default:
+        return buttonOptions;
+    }
+  }, [selectedComponent, buttonOptions, cardOptions, navbarOptions]);
+
+  // 옵션 변경 핸들러
   const handleOptionChange = (
-    componentType: "button" | "card" | "navbar",
     name: string,
     value: string | boolean | number
   ) => {
-    switch (componentType) {
+    switch (selectedComponent) {
       case "button":
         setButtonOptions({
           ...buttonOptions,
@@ -96,78 +93,37 @@ const Generator = () => {
     }
   };
   // 컴포넌트 타입 변경 핸들러
-  const handleComponentTypeChange = (type: "button" | "card" | "navbar") => {
+  const handleComponentTypeChange = (type: ComponentType) => {
     setSelectedComponent(type);
   };
 
+  // 코드 포맷 변경 핸들러
   const handleFormatChange = (format: "react-tailwind" | "react-scss") => {
     setCodeFormat(format);
   };
 
-  const handleOptimizedCode = (code: string) => {
+  // 최적화된 코드 적용 핸들러
+  const handleCodeUpdate = (code: string) => {
     setCustomCode(code);
   };
 
-  const onSelectDesign = (code: string) => {
-    setCustomCode(code);
-  };
-
+  // 컴포넌트 변경 시 커스텀 코드 초기화
   useEffect(() => {
     setCustomCode(null);
-  }, [selectedComponent]);
+  }, [selectedComponent, setCustomCode]);
 
-  // const CurrentComponent = useMemo(() => {
-  //   type CurrentType = typeof selectedComponent;
-  //   type SelectCurrnet = ComponentOptionsTypeMap[CurrentType];
-  //   const config = componentConfig[selectedComponent];
-
-  //   return {
-  //     Options: config.Component as React.ComponentType<{
-  //       options: SelectCurrnet;
-  //       onOptionChange: (name: string, value: any) => void;
-  //     }>,
-  //     Preview: config.Preview as React.ComponentType<{
-  //       options: SelectCurrnet;
-  //     }>,
-  //     Code: config.CodeGenerator as React.ComponentType<{
-  //       options: SelectCurrnet;
-  //       codeFormat: "react-tailwind" | "react-scss";
-  //       onFormatChange: (format: "react-tailwind" | "react-scss") => void;
-  //       customCode: string | null;
-  //     }>,
-  //   };
-  // }, [selectedComponent]);
-
-  function generatedCurrentCode(
-    componentType: ComponentType,
-    options: ComponentOptionsTypeMap[ComponentType],
-    codeFormat: "react-tailwind" | "react-scss"
-  ): string {
-    switch (componentType) {
-      case "button":
-        return generateButtonCode(options as ButtonOptions, codeFormat);
-
-      case "card":
-        return generateCardCode(options as CardOptions, codeFormat);
-
-      case "navbar":
-        return generateNavbarCode(options as NavbarOptions, codeFormat);
-
-      default:
-        return "// 지원 되지않는 컴포넌트입니다";
-    }
-  }
-
+  // 현재 코드 문자열 생성
   const currentCodeString = useMemo(() => {
-    return generatedCurrentCode(
-      selectedComponent,
-      selectedComponent === "button"
-        ? buttonOptions
-        : selectedComponent === "card"
-        ? cardOptions
-        : navbarOptions,
-      codeFormat
-    );
+    switch (selectedComponent) {
+      case "button":
+        return generateButtonCode(buttonOptions, codeFormat);
+      case "card":
+        return generateCardCode(cardOptions, codeFormat);
+      case "navbar":
+        return generateNavbarCode(navbarOptions, codeFormat);
+      default:
+        return "// 지원되지 않는 컴포넌트입니다";
+    }
   }, [
     selectedComponent,
     buttonOptions,
@@ -211,25 +167,19 @@ const Generator = () => {
           {selectedComponent === "button" && (
             <ButtonOptionsPanel
               options={buttonOptions}
-              onOptionChange={(name, value) =>
-                handleOptionChange("button", name, value)
-              }
+              onOptionChange={(name, value) => handleOptionChange(name, value)}
             />
           )}
           {selectedComponent === "card" && (
             <CardOptionsPanel
               options={cardOptions}
-              onOptionChange={(name, value) =>
-                handleOptionChange("card", name, value)
-              }
+              onOptionChange={(name, value) => handleOptionChange(name, value)}
             />
           )}
           {selectedComponent === "navbar" && (
             <NavbarOptionsPanel
               options={navbarOptions}
-              onOptionChange={(name, value) =>
-                handleOptionChange("navbar", name, value)
-              }
+              onOptionChange={(name, value) => handleOptionChange(name, value)}
             />
           )}
         </div>
@@ -282,26 +232,20 @@ const Generator = () => {
 
           <TrendDesign
             componentType={selectedComponent}
-            onSelectDesign={handleOptimizedCode}
+            onSelectDesign={handleCodeUpdate}
           />
 
           <AIOptimizer
             currentCode={currentCodeString}
             componentType={selectedComponent}
-            options={
-              selectedComponent === "button"
-                ? buttonOptions
-                : selectedComponent === "card"
-                ? cardOptions
-                : navbarOptions
-            }
+            options={currentOptions}
             codeFormat={codeFormat}
-            onApplyOptimized={handleOptimizedCode}
+            onApplyOptimized={handleCodeUpdate}
           />
 
           <AiDesign
             componentType={selectedComponent}
-            onSelectDesign={onSelectDesign}
+            onSelectDesign={handleCodeUpdate}
           />
         </div>
       </div>

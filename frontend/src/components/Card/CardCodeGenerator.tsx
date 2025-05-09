@@ -1,7 +1,7 @@
 import React from "react";
 import styles from "./Card.module.scss";
 import { CardOptions } from "@/types/index";
-import { CodeDisplay } from "@/utils/CodeDisplay";
+import { CodeDisplay } from "@/utils/codeGenerators/CodeGeneratorUtils";
 
 interface CardeCodeType {
   options: CardOptions;
