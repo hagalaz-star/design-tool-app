@@ -1,0 +1,87 @@
+# Design Tool Backend
+
+디자인 도구의 백엔드 API 서버입니다. FastAPI를 기반으로 구축되었으며, AI 기반 디자인 추천 및 최적화 기능을 제공합니다.
+
+## 기술 스택
+
+- **프레임워크**: FastAPI
+- **Python 버전**: 3.9+
+- **패키지 관리**: Poetry
+- **AI 서비스**: Google Generative AI
+
+## 프로젝트 구조
+
+```
+backend/
+├── app/                    # 애플리케이션 코드
+│   ├── api/                # API 엔드포인트
+│   │   └── endpoints/      # 라우터 정의
+│   │       └── design.py   # 디자인 관련 API
+│   ├── core/               # 핵심 비즈니스 로직
+│   │   ├── ai_service.py   # AI 서비스 통합
+│   │   ├── cache.py        # 캐싱 기능
+│   │   ├── cache_utils.py  # 캐싱 유틸리티
+│   │   ├── config.py       # 설정 관리
+│   │   └── design_service.py # 디자인 서비스 로직
+│   ├── models/             # 데이터베이스 모델
+│   ├── schemas/            # Pydantic 스키마
+│   └── main.py             # 애플리케이션 진입점
+├── .env.local              # 환경 변수 (비공개)
+├── pyproject.toml          # 프로젝트 메타데이터 및 의존성
+└── poetry.lock             # 의존성 잠금 파일
+```
+
+## 핵심 기능
+
+- **트렌드 디자인 API**: 최신 디자인 트렌드 기반 추천
+- **AI 최적화**: Google Generative AI를 활용한 디자인 최적화
+- **캐싱 시스템**: 성능 향상을 위한 결과 캐싱
+
+## 시작하기
+
+### 환경 설정
+
+1. Poetry 설치 (아직 설치하지 않은 경우)
+   ```bash
+   curl -sSL https://install.python-poetry.org | python3 -
+   ```
+
+2. 의존성 설치
+   ```bash
+   poetry install
+   ```
+
+3. 환경 변수 설정
+   `.env.local` 파일을 생성하고 다음 변수를 설정합니다:
+   ```
+   GOOGLE_API_KEY=your_api_key_here
+   ```
+
+### 서버 실행
+
+```bash
+poetry run uvicorn app.main:app --reload
+```
+
+서버는 기본적으로 http://localhost:8000 에서 실행됩니다.
+
+## API 문서
+
+FastAPI는 자동으로 API 문서를 생성합니다:
+- Swagger UI: http://localhost:8000/docs
+- ReDoc: http://localhost:8000/redoc
+
+## 개발 가이드
+
+### 새 엔드포인트 추가하기
+
+1. `app/api/endpoints/` 디렉토리에 새 라우터 파일 생성
+2. `app/main.py`에 라우터 등록
+3. 필요한 스키마를 `app/schemas/`에 정의
+4. 비즈니스 로직을 `app/core/`에 구현
+
+### 코드 스타일
+
+- 타입 힌팅 사용
+- Pydantic 모델을 통한 데이터 검증
+- 비동기 함수 사용 권장
