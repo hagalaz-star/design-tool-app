@@ -1,4 +1,4 @@
-import React, { CSSProperties, useState } from "react";
+import React, { CSSProperties} from "react";
 import { ButtonOptions } from "@/types";
 import styles from "./Button.module.scss";
 

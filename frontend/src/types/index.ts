@@ -8,6 +8,8 @@ export type ComponentOptionsTypeMap = {
   navbar: NavbarOptions;
 };
 
+
+// 각 디자인 옵션 타입 정의 
 export interface ButtonOptions {
   backgroundColor: string;
   color: string;

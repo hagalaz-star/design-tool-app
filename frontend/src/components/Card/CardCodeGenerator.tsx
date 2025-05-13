@@ -1,7 +1,7 @@
 import React from "react";
 import styles from "./Card.module.scss";
 import { CardOptions } from "@/types/index";
-import { CodeDisplay } from "@/utils/codeGenerators/CodeGeneratorUtils";
+import { CodeGeneratorUtils } from "@/utils/codeGenerators/CodeGeneratorUtils";
 
 interface CardeCodeType {
   options: CardOptions;
@@ -17,7 +17,7 @@ function CardCode({
   customCode,
 }: CardeCodeType) {
   return (
-    <CodeDisplay
+    <CodeGeneratorUtils
       componentType="card"
       options={options}
       styles={styles}

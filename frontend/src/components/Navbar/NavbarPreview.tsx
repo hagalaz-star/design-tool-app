@@ -31,9 +31,7 @@ function NavbarPreview({ options }: NavbarOptionsProps) {
     padding: "0 20px",
     width: "100%",
     position: options.fixed ? "fixed" : "relative",
-    borderBottom: options.borderBottom
-      ? `${options.borderWidth} solid ${options.borderColor}`
-      : "none",
+    borderBottom: options.borderBottom ? `${options.borderWidth} solid ${options.borderColor}` : "none",
   };
 
   const logoStyle: CSSProperties = {
@@ -55,12 +53,7 @@ function NavbarPreview({ options }: NavbarOptionsProps) {
     cursor: "pointer",
     color: options.textColor,
     fontSize: options.menuFontSize,
-    fontWeight:
-      options.menuFontWeight === "normal"
-        ? "normal"
-        : options.menuFontWeight === "medium"
-        ? "500"
-        : "bold",
+    fontWeight: options.menuFontWeight === "normal" ?  "normal" : options.menuFontWeight === "medium" ? "500" : "bold",
   };
 
   return (

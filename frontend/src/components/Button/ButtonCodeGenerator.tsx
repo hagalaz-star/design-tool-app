@@ -1,7 +1,7 @@
 import React from "react";
 import styles from "./Button.module.scss";
 import { ButtonOptions } from "@/types";
-import { CodeDisplay } from "@/utils/codeGenerators/CodeGeneratorUtils";
+import { CodeGeneratorUtils } from "@/utils/codeGenerators/CodeGeneratorUtils";
 
 interface ButtonCodeType {
   options: ButtonOptions;
@@ -17,7 +17,7 @@ function ButtonCode({
   customCode,
 }: ButtonCodeType) {
   return (
-    <CodeDisplay
+    <CodeGeneratorUtils
       codeFormat={codeFormat}
       componentType="button"
       options={options}
