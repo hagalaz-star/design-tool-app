@@ -66,6 +66,8 @@ const Generator = () => {
     }
   }, [selectedComponent, buttonOptions, cardOptions, navbarOptions]);
 
+
+
   // 옵션 변경 핸들러
   const handleOptionChange = (
     name: string,
@@ -170,6 +172,7 @@ const Generator = () => {
               onOptionChange={(name, value) => handleOptionChange(name, value)}
             />
           )}
+
           {selectedComponent === "card" && (
             <CardOptionsPanel
               options={cardOptions}
